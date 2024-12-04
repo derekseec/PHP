@@ -1,0 +1,48 @@
+Xdebug3 with docker
+
+//For Xdebug3 , the config set is not use, if you use these config set below , you do not need to 
+//install chrome tools to lanuch it , start_with_request will instead of it 
+
+//the config set in docker
+zend_extension=xdebug
+xdebug.mode=debug
+xdebug.start_with_request = yes
+xdebug.client_host = "host.docker.internal"
+//xdebug.idekey="VSCODE"
+xdebug.log=/tmp/xdebug_remote.log
+
+//the config set in VS Code 
+
+"launch": {
+"configurations": [{
+    "name": "Listen for Xdebug",
+    "type": "php",
+    "request": "launch",
+    "hostname": "127.0.0.1",
+    "pathMappings": {
+        //docker_code_folder_path:Windows_code_folder_path
+        "/var/www/codeFolder":"C:/Users/derek_chen/Desktop/code/codeFolder"
+    },
+    //you can use netstat tools to check the status , I use Netstat in Xampp of windows to check it 
+    "port": 9003
+}
+
+
+Always use xdebug_info() to find out why is not working , not phpinfo();
+<?php
+$i = 1;
+//phpinfo();
+xdebug_info();
+
+//PHPstorm
+1.Use the "Run/Debug Configurations" => "PHP Remote Debug" =>  Make a new Name for Config
+2.Set Host localhost , Port 80 , Use Xdebug , Set the Project Path like VScode
+3.File => Setting => Search "Xdebug" => Make sure the port use 9003
+4.Click Start "Debug" and Listen
+
+
+//Launch you "Listen for Xdebug" in VS code
+[Step Debug] Time-out connecting to debugging client, waited: 200 ms. Tried: host.docker.internal:9003 (through xdebug.client_host/xdebug.client_port).	
+
+//confrim correct pathMappings
+[Step Debug] Breakpoint file name does not exist: c:/Users/derek_chen/Desktop/code/codeFolder/test.php (No such file or directory).	
